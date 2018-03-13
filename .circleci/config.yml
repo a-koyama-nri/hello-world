@@ -7,7 +7,7 @@ jobs:
 #     タイムゾーンを日本時間にする
       TZ: "/usr/share/zoneinfo/Asia/Tokyo"
 #     ECRのURIが長いのでここに書いておく
-      REPONAME: "208950847743.dkr.ecr.ap-northeast-1.amazonaws.com/koyatest"
+      REPONAME: "208950847743.dkr.ecr.ap-northeast-1.amazonaws.com"
 #   Dockerコンテナ使用を宣言
     docker:
 #       CircleCI提供のpython入りDockerイメージを使用する

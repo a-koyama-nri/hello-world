@@ -1,13 +1,44 @@
+# CircleCI 2.0を指定
 version: 2
 jobs:
+# workflowsを使わない場合はjobsにbuildが必要
   build:
+    environment:
+#     タイムゾーンを日本時間にする
+      TZ: "/usr/share/zoneinfo/Asia/Tokyo"
+#     ECRのURIが長いのでここに書いておく
+      REPONAME: "208950847743.dkr.ecr.ap-northeast-1.amazonaws.com/koyatest"
+#   Dockerコンテナ使用を宣言
     docker:
-      - image: debian:stretch
+#       CircleCI提供のpython入りDockerイメージを使用する
+#      （AWS CLIのインストールにはpythonが必要）
+      - image: circleci/python:2.7.14-stretch-browsers
     steps:
+#       GitHubからファイルを持ってくる
       - checkout
+#       dockerコマンドを使用する場合に指定
+      - setup_remote_docker
+#       AWS CLIをインストール
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: "Install AWS CLI"
+          command: |
+            pip install awscli --upgrade --user
+#       Dockerイメージをビルド
       - run:
-          name: Print the Current Time
-          command: date
+          name: "Build docker image"
+          command: docker build -t $REPONAME/hello-world:latest .
+#       作成されたDockerイメージを起動
+#       httpでApacheのテストページを表示
+      - run:
+          name: "Display Test Page"
+          command: |
+            docker run -d -p 80:80 --name newimg $REPONAME/hello-world:latest
+            docker exec newimg curl http://localhost/
+#       AWS CLIでログイン
+#       作成されたDockerイメージをECRに保存
+      - run:
+          name: "Push docker image"
+          command: |
+            eval $(~/.local/bin/aws ecr get-login --no-include-email --region ap-northeast-1)
+            docker push $REPONAME/hello-world:latest
+

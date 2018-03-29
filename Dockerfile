@@ -16,8 +16,8 @@ RUN sed -ri 's/;date.timezone =/date.timezone = Asia\/Tokyo/g' /etc/php.ini
 COPY index.php /var/www/html/
 
 # pythonをダウンロード(確認用)
-RUN yum -y install python36u
-RUN yum -y install python36u-pip
+RUN yum -y install python36
+RUN yum -y install python36-pip
 
 # pythonイメージからスタート
 # FROM python:3.6.4

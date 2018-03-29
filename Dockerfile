@@ -1,9 +1,20 @@
+# DockerHubからAmazon Linux 2のDockerイメージを取得
+FROM amazonlinux:2
 
-# ECRから取得するDockerイメージ(確認用)
-FROM 928622159311.dkr.ecr.ap-northeast-1.amazonaws.com/pf-dev-ecr-baseimg:latest
+# 作成者情報
+MAINTAINER NRI
+
+# アップデートと必要なパッケージのインストール
+RUN yum -y update ; yum clean all
+RUN yum -y install httpd php python-pip docker git openssh-clients openssh-server ; yum clean all
+# AWS CLIのインストール
+RUN pip install awscli
+# PHPの時刻を日本時間に
+RUN sed -ri 's/;date.timezone =/date.timezone = Asia\/Tokyo/g' /etc/php.ini
 
 # テスト用PHPスクリプトをDockerコンテナ内にコピー(確認用)
 COPY index.php /var/www/html/
+
 # pythonをダウンロード(確認用)
 RUN yum -y install python36u
 RUN yum -y install python36u-pip

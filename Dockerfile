@@ -6,7 +6,7 @@ MAINTAINER NRI
 
 # アップデートと必要なパッケージのインストール
 RUN yum -y update ; yum clean all
-RUM yum -y install python3
+RUN yum -y install python3
 RUN yum -y install httpd php python-pip docker git openssh-clients openssh-server; yum clean all
 # AWS CLIのインストール
 RUN pip install awscli

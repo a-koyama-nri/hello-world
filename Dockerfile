@@ -12,6 +12,12 @@ RUN pip install awscli
 # PHPの時刻を日本時間に
 RUN sed -ri 's/;date.timezone =/date.timezone = Asia\/Tokyo/g' /etc/php.ini
 
+# 確認用コード。本来不要なもの
+RUN mkdir -p /usr/src/app && mkdir /log
+WORKDIR /usr/src/app
+COPY . /usr/src/app
+RUN ls -ltr
+
 # 80番ポートを外部に公開
 EXPOSE 80
 

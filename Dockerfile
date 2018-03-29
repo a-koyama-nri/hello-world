@@ -6,7 +6,7 @@ MAINTAINER NRI
 
 # アップデートと必要なパッケージのインストール
 RUN yum -y update ; yum clean all
-RUN yum -y install httpd php python-pip docker git openssh-clients openssh-server ; yum clean all
+RUN yum -y install httpd php python-pip docker git openssh-clients openssh-server python; yum clean all
 # AWS CLIのインストール
 RUN pip install awscli
 # PHPの時刻を日本時間に
@@ -14,10 +14,6 @@ RUN sed -ri 's/;date.timezone =/date.timezone = Asia\/Tokyo/g' /etc/php.ini
 
 # テスト用PHPスクリプトをDockerコンテナ内にコピー(確認用)
 COPY index.php /var/www/html/
-
-# pythonをダウンロード(確認用)
-RUN yum -y install python36
-RUN yum -y install python36-pip
 
 # pythonイメージからスタート
 # FROM python:3.6.4

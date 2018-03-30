@@ -1,23 +1,12 @@
-# DockerHubからAmazon Linux 2のDockerイメージを取得
-FROM amazonlinux:2
-
-# 作成者情報
-MAINTAINER NRI
+# ECRから取得するDockerイメージ(確認用)
+FROM 928622159311.dkr.ecr.ap-northeast-1.amazonaws.com/pf-dev-ecr-baseimg:latest
 
 # アップデートと必要なパッケージのインストール
 RUN yum -y update ; yum clean all
 RUN yum -y install python3
-RUN yum -y install httpd php python-pip docker git openssh-clients openssh-server; yum clean all
-# AWS CLIのインストール
-RUN pip install awscli
-# PHPの時刻を日本時間に
-RUN sed -ri 's/;date.timezone =/date.timezone = Asia\/Tokyo/g' /etc/php.ini
 
 # テスト用PHPスクリプトをDockerコンテナ内にコピー(確認用)
 COPY index.php /var/www/html/
-
-# pythonイメージからスタート
-# FROM python:3.6.4
 
 # extra metadata
 MAINTAINER NRI
@@ -29,8 +18,8 @@ RUN mkdir -p /usr/src/app && mkdir /log
 WORKDIR /usr/src/app
 
 # pythonのライブラリ取得
-# COPY . /usr/src/app
-# RUN pip install -r requirements.txt
+ COPY . /usr/src/app
+ RUN pip install -r requirements.txt
 
 # 80番ポートを外部に公開
 EXPOSE 80

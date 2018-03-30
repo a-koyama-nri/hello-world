@@ -4,6 +4,7 @@ FROM 928622159311.dkr.ecr.ap-northeast-1.amazonaws.com/pf-dev-ecr-baseimg:latest
 # アップデートと必要なパッケージのインストール
 RUN yum -y update ; yum clean all
 RUN yum -y install python3
+RUN yum -y install python3-pip
 RUN python -m pip -V
 
 # テスト用PHPスクリプトをDockerコンテナ内にコピー(確認用)

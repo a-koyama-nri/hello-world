@@ -19,6 +19,7 @@ WORKDIR /usr/src/app
 
 # pythonのライブラリ取得
  COPY . /usr/src/app
+ RUN pip install --upgrade pip
  RUN pip install -r requirements.txt
 
 # 80番ポートを外部に公開

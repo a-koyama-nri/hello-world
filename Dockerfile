@@ -6,7 +6,7 @@ MAINTAINER NRI
 
 # アップデートと必要なパッケージのインストール
 RUN yum -y update ; yum clean all
-RUN yum -y install httpd php python3 docker git openssh-clients openssh-server ; yum clean all
+RUN yum -y install httpd php python3 python3-pip docker git openssh-clients openssh-server ; yum clean all
 # AWS CLIのインストール
 RUN pip install awscli
 # PHPの時刻を日本時間に

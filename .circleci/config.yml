@@ -1,7 +1,7 @@
 # CircleCI 2.0を指定
 version: 2
 jobs:
-# workflowsを使わない場合はjobsにbuildが必要
+# workflowsを使わない時はjobsにbuildが必要
   build:
     environment:
 #     タイムゾーンを日本時間にする
@@ -10,19 +10,14 @@ jobs:
       REPONAME: "928622159311.dkr.ecr.ap-northeast-1.amazonaws.com"
 #   Dockerコンテナ使用を宣言
     docker:
-#       CircleCI提供のpython入りDockerイメージを使用する
-#      （AWS CLIのインストールにはpythonが必要）
-      - image: circleci/python:2.7.14-stretch-browsers
+#       ECRに置いてあるDockerイメージ名（これがCircleCIのビルド環境になる）
+      - image: $REPONAME/pf-dev-ecr-baseimg:latest
     steps:
 #       GitHubからファイルを持ってくる
       - checkout
-#       dockerコマンドを使用する場合に指定
+#       dockerコマンドを使用する場合には指定
       - setup_remote_docker
-#       AWS CLIをインストール
-      - run:
-          name: "Install AWS CLI"
-          command: |
-            pip install awscli --upgrade --user
+#       DockerfileでECRからイメージを取得するのでその前にAWS CLIでログイン
 #       Dockerイメージをビルド
       - run:
           name: "Build docker image"
@@ -30,16 +25,14 @@ jobs:
             eval $(aws ecr get-login --no-include-email --region ap-northeast-1)
             docker build -t $REPONAME/pf-dev-ecr-webap:latest .
 #       作成されたDockerイメージを起動
-#       httpでApacheのテストページを表示
+#       httpでPHPスクリプトが表示されるかテスト
       - run:
           name: "Display Test Page"
           command: |
-            docker run -d -p 80:80 --name newimg $REPONAME/pf-dev-ecr-webap:latest
-            docker exec newimg curl http://localhost/
-#       AWS CLIでログイン
+            docker run -d -p 80:80 --name newwebap $REPONAME/pf-dev-ecr-webap:latest
+            docker exec newwebap curl http://localhost/
 #       作成されたDockerイメージをECRに保存
       - run:
           name: "Push docker image"
           command: |
-            eval $(~/.local/bin/aws ecr get-login --no-include-email --region ap-northeast-1)
             docker push $REPONAME/pf-dev-ecr-webap:latest

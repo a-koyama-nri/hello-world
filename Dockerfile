@@ -8,7 +8,7 @@ MAINTAINER NRI
 RUN yum -y update ; yum clean all
 RUN yum -y install httpd php python3 python3-pip docker git openssh-clients openssh-server ; yum clean all
 # AWS CLIのインストール
-RUN pip install awscli
+RUN pip3 install awscli
 # PHPの時刻を日本時間に
 RUN sed -ri 's/;date.timezone =/date.timezone = Asia\/Tokyo/g' /etc/php.ini
 

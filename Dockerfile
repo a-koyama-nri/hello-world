@@ -29,8 +29,8 @@ RUN mkdir -p /usr/src/app && mkdir /log
 WORKDIR /usr/src/app
 
 # pythonのライブラリ取得
-COPY . /usr/src/app
-RUN pip install -r requirements.txt
+# COPY . /usr/src/app
+# RUN pip install -r requirements.txt
 
 # 80番ポートを外部に公開
 EXPOSE 80

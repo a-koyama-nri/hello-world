@@ -7,7 +7,7 @@ LABEL version="1.0"
 LABEL description="Text API Application Server Image with Dockerfile."
 
 # アップデートと必要なパッケージのインストール
-apt-get install httpd httpd-devel python3 python3-pip python3-devel docker git openssh-clients openssh-server gcc ; yum clean all
+apt-get install httpd httpd-devel python3 python3-pip python3-devel docker git openssh-clients openssh-server gcc
 
 # AWS CLIのインストール
 RUN pip3 install awscli
